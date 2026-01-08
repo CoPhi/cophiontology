@@ -1,0 +1,1257 @@
+@prefix : <http://cophilab.eu/ontologies/cophi/> .
+@prefix ceo: <http://purl.org/critical-edition-ontology/> .
+# source: https://github.com/ChiaraMartignano/critical-edition-ontology/tree/main/docs
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+# source: https://cidoc-crm.org/html/cidoc_crm_v7.1.3.html
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+# Source: https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl
+@prefix lrm: <http://iflastandards.info/ns/lrm/lrmoo/> .
+# source: https://gitlab.isl.ics.forth.gr/cidoc-crm/compatible-models/lrmoo/-/tree/main/1.0
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sshoc: <http://www.ics.forth.gr/SSHOC/> .
+# source: documented at: https://zenodo.org/records/3744861
+@prefix crmtex: <http://www.cidoc-crm.org/extensions/crmtex#> .
+# source: https://gitlab.isl.ics.forth.gr/cidoc-crm/compatible-models/crmtex/-/tree/v2.0_preparation/2.0
+@prefix ontolex: <http://www.w3.org/ns/lemon/ontolex#> .
+# source: http://www.w3.org/ns/lemon/ontolex
+@base <http://cophilab.eu/ontologies/cophi/> .
+
+<http://cophilab.eu/ontologies/cophi> rdf:type owl:Ontology ;
+                                       owl:imports <http://purl.org/critical-edition-ontology> ,
+                                                   crm: ,
+                                                   <http://www.cidoc-crm.org/extensions/crmtex/> ,
+                                                   <http://www.ics.forth.gr/SSHOC> .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://www.cidoc-crm.org/cidoc-crm/P107_has_current_or_former_affiliation
+crm:P107_has_current_or_former_affiliation rdf:type owl:AnnotationProperty .
+
+
+###  http://www.cidoc-crm.org/cidoc-crm/P131_is_identified_by
+crm:P131_is_identified_by rdf:type owl:AnnotationProperty .
+
+
+###  http://www.cidoc-crm.org/cidoc-crm/P3_has_note
+crm:P3_has_note rdf:type owl:AnnotationProperty .
+
+
+###  http://www.cidoc-crm.org/cidoc-crm/P91_has_unit
+crm:P91_has_unit rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Datatypes
+#################################################################
+
+###  http://www.w3.org/2001/XMLSchema#date
+xsd:date rdf:type rdfs:Datatype .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://cophilab.eu/ontologies/cophi/first_cts_urn
+:first_cts_urn rdf:type owl:ObjectProperty ;
+               rdfs:domain :TextPassage ;
+               rdfs:range :CTSURN .
+
+
+###  http://cophilab.eu/ontologies/cophi/has_baseline
+:has_baseline rdf:type owl:ObjectProperty ;
+              rdfs:domain :Line ;
+              rdfs:range :Baseline ;
+              rdfs:comment "Relates a Line to its Baseline." ;
+              rdfs:label "has baseline" .
+
+
+###  http://cophilab.eu/ontologies/cophi/has_cts_urn
+:has_cts_urn rdf:type owl:ObjectProperty ;
+             rdfs:domain [ rdf:type owl:Class ;
+                           owl:unionOf ( :DocumentObject
+                                         :TextObject
+                                       )
+                         ] ;
+             rdfs:range :CTSURN .
+
+
+###  http://cophilab.eu/ontologies/cophi/has_division_type
+:has_division_type rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf crm:P2_has_type ;
+                   rdfs:domain :Division ;
+                   rdfs:range :DivisionType ;
+                   rdfs:comment "Relates a Division to its DivisionType." ;
+                   rdfs:label "has division type" .
+
+
+###  http://cophilab.eu/ontologies/cophi/has_document_position
+:has_document_position rdf:type owl:ObjectProperty ;
+                       rdfs:domain :DocumentObject .
+
+
+###  http://cophilab.eu/ontologies/cophi/has_line_type
+:has_line_type rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf crm:P2_has_type ;
+               rdfs:domain :Line ;
+               rdfs:range :LineType ;
+               rdfs:comment "Relates a Line to its LineType." ;
+               rdfs:label "has line type" .
+
+
+###  http://cophilab.eu/ontologies/cophi/has_polygon
+:has_polygon rdf:type owl:ObjectProperty ;
+             rdfs:domain :Shape ;
+             rdfs:range :Polygon ;
+             rdfs:comment "Relates a Shape to its Polygon." ;
+             rdfs:label "has polygon" .
+
+
+###  http://cophilab.eu/ontologies/cophi/has_segment_type
+:has_segment_type rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf crm:P2_has_type ;
+                  rdfs:domain :Segment ;
+                  rdfs:range :SegmentType ;
+                  rdfs:comment "Relates a Segment to its SegmentType." ;
+                  rdfs:label "has segment type" .
+
+
+###  http://cophilab.eu/ontologies/cophi/has_shape
+:has_shape rdf:type owl:ObjectProperty ;
+           rdfs:domain crm:E24_Physical_Human-Made_Thing ;
+           rdfs:range :Shape ;
+           rdfs:comment "Relates a Thing to its Shape." ;
+           rdfs:label "has shape" .
+
+
+###  http://cophilab.eu/ontologies/cophi/has_text_passages
+:has_text_passages rdf:type owl:ObjectProperty ;
+                   rdfs:domain :Citation ;
+                   rdfs:range [ owl:intersectionOf ( rdf:List
+                                                     [ rdf:type owl:Restriction ;
+                                                       owl:onProperty rdf:first ;
+                                                       owl:allValuesFrom :TextPassage
+                                                     ]
+                                                     [ rdf:type owl:Restriction ;
+                                                       owl:onProperty rdf:rest ;
+                                                       owl:allValuesFrom [ rdf:type owl:Class ;
+                                                                           owl:unionOf ( rdf:List
+                                                                                         owl:Nothing
+                                                                                       )
+                                                                         ]
+                                                     ]
+                                                   ) ;
+                                rdf:type owl:Class
+                              ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/has_text_position
+:has_text_position rdf:type owl:ObjectProperty ;
+                   rdfs:domain :TextObject .
+
+
+###  http://cophilab.eu/ontologies/cophi/has_token_part
+:has_token_part rdf:type owl:ObjectProperty ;
+                rdfs:domain :Token ;
+                rdfs:range :Token ;
+                rdfs:comment "Relates a Token to its Token part." ;
+                rdfs:label "has token part" .
+
+
+###  http://cophilab.eu/ontologies/cophi/has_token_type
+:has_token_type rdf:type owl:ObjectProperty ;
+                rdfs:domain :Token ;
+                rdfs:range :TokenType ;
+                rdfs:comment "Relates a Token to its TokenType." ;
+                rdfs:label "has token type" .
+
+
+###  http://cophilab.eu/ontologies/cophi/has_written_space_type
+:has_written_space_type rdf:type owl:ObjectProperty ;
+                        rdfs:subPropertyOf crm:P2_has_type ;
+                        rdfs:domain :WrittenSpace ;
+                        rdfs:range :WrittenSpaceType ;
+                        rdfs:comment "Relates a WrittenSpace to its WrittenSpaceType." ;
+                        rdfs:label "has written space type" .
+
+
+###  http://cophilab.eu/ontologies/cophi/has_zone_type
+:has_zone_type rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf crm:P2_has_type ;
+               rdfs:domain :Zone ;
+               rdfs:range :ZoneType ;
+               rdfs:comment "Relates a Zone to its ZoneType." ;
+               rdfs:label "has zone type" .
+
+
+###  http://cophilab.eu/ontologies/cophi/last_cts_urn
+:last_cts_urn rdf:type owl:ObjectProperty ;
+              rdfs:domain :TextPassage ;
+              rdfs:range :CTSURN .
+
+
+###  http://www.opengis.net/ont/geosparql#as_linestring
+geo:as_linestring rdf:type owl:ObjectProperty ;
+                  rdfs:domain :Baseline ;
+                  rdfs:range geo:wktLiteral .
+
+
+###  http://www.opengis.net/ont/geosparql#as_polygon
+geo:as_polygon rdf:type owl:ObjectProperty ;
+               rdfs:domain :Polygon ;
+               rdfs:range geo:wktLiteral .
+
+
+###  http://www.w3.org/1999/02/22-rdf-syntax-ns#first
+rdf:first rdf:type owl:ObjectProperty .
+
+
+###  http://www.w3.org/1999/02/22-rdf-syntax-ns#rest
+rdf:rest rdf:type owl:ObjectProperty .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://cophilab.eu/ontologies/cophi/has_document_position
+:has_document_position rdf:type owl:DatatypeProperty ;
+                       rdfs:range rdfs:Literal .
+
+
+###  http://cophilab.eu/ontologies/cophi/has_text_position
+:has_text_position rdf:type owl:DatatypeProperty ;
+                   rdfs:range rdfs:Literal .
+
+
+###  http://cophilab.eu/ontologies/cophi/height
+:height rdf:type owl:DatatypeProperty ;
+        rdfs:domain crm:E24_Physical_Human-Made_Thing ;
+        rdfs:range xsd:integer .
+
+
+###  http://cophilab.eu/ontologies/cophi/hpos
+:hpos rdf:type owl:DatatypeProperty ;
+      rdfs:domain crm:E24_Physical_Human-Made_Thing ;
+      rdfs:range xsd:integer .
+
+
+###  http://cophilab.eu/ontologies/cophi/vpos
+:vpos rdf:type owl:DatatypeProperty ;
+      rdfs:domain crm:E24_Physical_Human-Made_Thing ;
+      rdfs:range xsd:integer .
+
+
+###  http://cophilab.eu/ontologies/cophi/width
+:width rdf:type owl:DatatypeProperty ;
+       rdfs:domain crm:E24_Physical_Human-Made_Thing ;
+       rdfs:range xsd:integer .
+
+
+###  http://www.opengis.net/ont/geosparql#as_linestring
+geo:as_linestring rdf:type owl:DatatypeProperty .
+
+
+###  http://www.opengis.net/ont/geosparql#as_polygon
+geo:as_polygon rdf:type owl:DatatypeProperty .
+
+
+###  http://www.w3.org/1999/02/22-rdf-syntax-ns#value
+rdf:value rdf:type owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://cophilab.eu/ontologies/cophi/AcademicTextCorpus
+:AcademicTextCorpus rdf:type owl:Class ;
+                    rdfs:subClassOf :Corpus ;
+                    rdfs:label "Corpus of Academic Texts"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/Actor_Appellation
+:Actor_Appellation rdf:type owl:Class ;
+                   rdfs:subClassOf crm:E41_Appellation .
+
+
+###  http://cophilab.eu/ontologies/cophi/Baseline
+:Baseline rdf:type owl:Class ;
+          rdfs:subClassOf :Digital_Human-Made_Feature ;
+          rdfs:comment "The baseline of a text line" ;
+          rdfs:label "Baseline" .
+
+
+###  http://cophilab.eu/ontologies/cophi/CTSURN
+:CTSURN rdf:type owl:Class ;
+        rdfs:subClassOf crm:E90_Symbolic_Object .
+
+
+###  http://cophilab.eu/ontologies/cophi/CharacterSequence
+:CharacterSequence rdf:type owl:Class ;
+                   rdfs:subClassOf crm:E90_Symbolic_Object ,
+                                   [ rdf:type owl:Restriction ;
+                                     owl:onProperty rdf:value ;
+                                     owl:allValuesFrom rdfs:Literal
+                                   ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/Citation
+:Citation rdf:type owl:Class ;
+          rdfs:subClassOf crm:E90_Symbolic_Object .
+
+
+###  http://cophilab.eu/ontologies/cophi/Codex
+:Codex rdf:type owl:Class ;
+       rdfs:subClassOf :DiplomaticEdition ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty crm:P46_is_composed_of ;
+                         owl:allValuesFrom :Layout
+                       ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/CodexFacsimile
+:CodexFacsimile rdf:type owl:Class ;
+                rdfs:subClassOf :Facsimile ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty crm:P46_is_composed_of ;
+                                  owl:allValuesFrom :LayoutFacsimile
+                                ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/ComputerMediatedCommunicationCorpus
+:ComputerMediatedCommunicationCorpus rdf:type owl:Class ;
+                                     rdfs:subClassOf :Corpus ;
+                                     rdfs:label "Computer-Mediated Communication Corpus"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/ConceptualResource
+:ConceptualResource rdf:type owl:Class ;
+                    rdfs:subClassOf :LexicalResource ;
+                    rdfs:label "Conceptual Resource"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/Contact_Point
+:Contact_Point rdf:type owl:Class ;
+               rdfs:subClassOf crm:E41_Appellation .
+
+
+###  http://cophilab.eu/ontologies/cophi/Corpus
+:Corpus rdf:type owl:Class ;
+        rdfs:subClassOf sshoc:SHE1_Dataset ;
+        rdfs:comment "A collection of structured language data, such as text or speech, that is used for linguistic research."@en ;
+        rdfs:label "Corpus"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/CorpusQueryTool
+:CorpusQueryTool rdf:type owl:Class ;
+                 rdfs:subClassOf :Tool ;
+                 rdfs:label "Corpus Query Tool"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/CriticalEdition
+:CriticalEdition rdf:type owl:Class ;
+                 rdfs:subClassOf :ScholarlyEdition ,
+                                 ceo:CriticalEdition .
+
+
+###  http://cophilab.eu/ontologies/cophi/CriticalTextToken
+:CriticalTextToken rdf:type owl:Class ;
+                   rdfs:subClassOf :TextToken ,
+                                   ceo:CriticalTextPassage .
+
+
+###  http://cophilab.eu/ontologies/cophi/Dictionary
+:Dictionary rdf:type owl:Class ;
+            rdfs:subClassOf :LexicalResource ;
+            rdfs:label "Dictionary"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/Digital_Human-Made_Feature
+:Digital_Human-Made_Feature rdf:type owl:Class ;
+                            rdfs:subClassOf :Digital_Human-Made_Thing .
+
+
+###  http://cophilab.eu/ontologies/cophi/Digital_Human-Made_Thing
+:Digital_Human-Made_Thing rdf:type owl:Class ;
+                          rdfs:subClassOf crm:E71_Human-Made_Thing .
+
+
+###  http://cophilab.eu/ontologies/cophi/DiplomaticEdition
+:DiplomaticEdition rdf:type owl:Class ;
+                   rdfs:subClassOf :DocumentResource ,
+                                   :ScholarlyEdition .
+
+
+###  http://cophilab.eu/ontologies/cophi/DisorderedSpeechCorpus
+:DisorderedSpeechCorpus rdf:type owl:Class ;
+                        rdfs:subClassOf :Corpus ;
+                        rdfs:label "Corpus of Disordered Speech"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/Division
+:Division rdf:type owl:Class ;
+          rdfs:subClassOf crm:E90_Symbolic_Object ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :has_division_type ;
+                            owl:allValuesFrom :DivisionType
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty crm:P46_is_composed_of ;
+                            owl:allValuesFrom [ rdf:type owl:Class ;
+                                                owl:unionOf ( :Division
+                                                              :Token
+                                                            )
+                                              ]
+                          ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/DivisionType
+:DivisionType rdf:type owl:Class ;
+              rdfs:subClassOf crm:E55_Type .
+
+
+###  http://cophilab.eu/ontologies/cophi/DocumentDivision
+:DocumentDivision rdf:type owl:Class ;
+                  rdfs:subClassOf :Division ,
+                                  :DocumentObject .
+
+
+###  http://cophilab.eu/ontologies/cophi/DocumentDivisionType
+:DocumentDivisionType rdf:type owl:Class ;
+                      rdfs:subClassOf :DivisionType .
+
+
+###  http://cophilab.eu/ontologies/cophi/DocumentObject
+:DocumentObject rdf:type owl:Class ;
+                rdfs:subClassOf crm:E73_Information_Object .
+
+
+###  http://cophilab.eu/ontologies/cophi/DocumentResource
+:DocumentResource rdf:type owl:Class ;
+                  rdfs:subClassOf sshoc:SHE1_Dataset .
+
+
+###  http://cophilab.eu/ontologies/cophi/DocumentToken
+:DocumentToken rdf:type owl:Class ;
+               rdfs:subClassOf :DocumentObject ,
+                               :Token .
+
+
+###  http://cophilab.eu/ontologies/cophi/EditedTextToken
+:EditedTextToken rdf:type owl:Class ;
+                 rdfs:subClassOf :TextToken ,
+                                 ceo:EditedTextPassage .
+
+
+###  http://cophilab.eu/ontologies/cophi/FacsimilarEdition
+:FacsimilarEdition rdf:type owl:Class ;
+                   rdfs:subClassOf :DocumentResource ,
+                                   :ScholarlyEdition .
+
+
+###  http://cophilab.eu/ontologies/cophi/Facsimile
+:Facsimile rdf:type owl:Class ;
+           rdfs:subClassOf :TextResource .
+
+
+###  http://cophilab.eu/ontologies/cophi/Glossary
+:Glossary rdf:type owl:Class ;
+          rdfs:subClassOf :LexicalResource ;
+          rdfs:label "Glossary"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/Glyph
+:Glyph rdf:type owl:Class ;
+       rdfs:subClassOf :Digital_Human-Made_Feature .
+
+
+###  http://cophilab.eu/ontologies/cophi/HTRDocument
+:HTRDocument rdf:type owl:Class ;
+             rdfs:subClassOf :TextRecognitionDocument .
+
+
+###  http://cophilab.eu/ontologies/cophi/HistoricalCorpus
+:HistoricalCorpus rdf:type owl:Class ;
+                  rdfs:subClassOf :Corpus ;
+                  rdfs:label "Historical Corpus"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/InterpretiveEdition
+:InterpretiveEdition rdf:type owl:Class ;
+                     rdfs:subClassOf :DocumentResource ,
+                                     :ScholarlyEdition .
+
+
+###  http://cophilab.eu/ontologies/cophi/LanguageModel
+:LanguageModel rdf:type owl:Class ;
+               rdfs:subClassOf :LexicalResource ;
+               rdfs:label "Language Model"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/Layout
+:Layout rdf:type owl:Class ;
+        rdfs:subClassOf :DiplomaticEdition ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty crm:P56_bears_feature ;
+                          owl:allValuesFrom :Page
+                        ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/LayoutFacsimile
+:LayoutFacsimile rdf:type owl:Class ;
+                 rdfs:subClassOf :Facsimile .
+
+
+###  http://cophilab.eu/ontologies/cophi/LearnerCorpus
+:LearnerCorpus rdf:type owl:Class ;
+               rdfs:subClassOf :Corpus ;
+               rdfs:label "L2 Learner Corpus"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/Learning_Course
+:Learning_Course rdf:type owl:Class ;
+                 rdfs:subClassOf sshoc:SHE4_Service ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty crm:P9_consists_of ;
+                                   owl:allValuesFrom :Learning_Section
+                                 ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/Learning_Module
+:Learning_Module rdf:type owl:Class ;
+                 rdfs:subClassOf sshoc:SHE4_Service ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty crm:P9_consists_of ;
+                                   owl:allValuesFrom :Learning_Unit
+                                 ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/Learning_Object
+:Learning_Object rdf:type owl:Class ;
+                 rdfs:subClassOf sshoc:SHE1_Dataset .
+
+
+###  http://cophilab.eu/ontologies/cophi/Learning_Path
+:Learning_Path rdf:type owl:Class ;
+               rdfs:subClassOf sshoc:SHE13_Work_Plan ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty crm:P9_consists_of ;
+                                 owl:allValuesFrom :Learning_Course
+                               ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/Learning_Section
+:Learning_Section rdf:type owl:Class ;
+                  rdfs:subClassOf sshoc:SHE4_Service ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty crm:P9_consists_of ;
+                                    owl:allValuesFrom :Learning_Module
+                                  ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/Learning_Unit
+:Learning_Unit rdf:type owl:Class ;
+               rdfs:subClassOf sshoc:SHE4_Service ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty crm:P16_used_specific_object ;
+                                 owl:allValuesFrom :Learning_Object
+                               ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/LegalCorpus
+:LegalCorpus rdf:type owl:Class ;
+             rdfs:subClassOf :Corpus ;
+             rdfs:label "Legal Corpus"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/Legal_Body
+:Legal_Body rdf:type owl:Class ;
+            rdfs:subClassOf crm:E72_Legal_Object .
+
+
+###  http://cophilab.eu/ontologies/cophi/LexicalResource
+:LexicalResource rdf:type owl:Class ;
+                 rdfs:subClassOf sshoc:SHE1_Dataset ;
+                 rdfs:label "Lexical Resource"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/Lexicon
+:Lexicon rdf:type owl:Class ;
+         rdfs:subClassOf :LexicalResource ;
+         rdfs:label "Lexicon"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/Line
+:Line rdf:type owl:Class ;
+      rdfs:subClassOf :Digital_Human-Made_Feature ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty crm:P56_bears_feature ;
+                        owl:allValuesFrom :Segment
+                      ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/LineType
+:LineType rdf:type owl:Class ;
+          rdfs:subClassOf crm:E55_Type .
+
+
+###  http://cophilab.eu/ontologies/cophi/LinguisticDivision
+:LinguisticDivision rdf:type owl:Class ;
+                    rdfs:subClassOf :Division ,
+                                    crm:E33_Linguistic_Object .
+
+
+###  http://cophilab.eu/ontologies/cophi/LinguisticDivisionType
+:LinguisticDivisionType rdf:type owl:Class ;
+                        rdfs:subClassOf :DivisionType .
+
+
+###  http://cophilab.eu/ontologies/cophi/LinguisticToken
+:LinguisticToken rdf:type owl:Class ;
+                 rdfs:subClassOf :Token ,
+                                 crm:E33_Linguistic_Object .
+
+
+###  http://cophilab.eu/ontologies/cophi/LiteraryCorpus
+:LiteraryCorpus rdf:type owl:Class ;
+                rdfs:subClassOf :Corpus ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty crm:P46_is_composed_of ;
+                                  owl:allValuesFrom :LiteraryTextResource
+                                ] ;
+                rdfs:label "Literary Corpus"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/LiteraryCriticalEdition
+:LiteraryCriticalEdition rdf:type owl:Class ;
+                         rdfs:subClassOf :CriticalEdition ,
+                                         :LiteraryTextResource .
+
+
+###  http://cophilab.eu/ontologies/cophi/LiteraryTextResource
+:LiteraryTextResource rdf:type owl:Class ;
+                      rdfs:subClassOf :TextResource .
+
+
+###  http://cophilab.eu/ontologies/cophi/ManuallyAnnotatedCorpus
+:ManuallyAnnotatedCorpus rdf:type owl:Class ;
+                         rdfs:subClassOf :Corpus ;
+                         rdfs:label "Manually Annotated Corpus"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/MultimodalCorpus
+:MultimodalCorpus rdf:type owl:Class ;
+                  rdfs:subClassOf :Corpus ;
+                  rdfs:label "Multimodal Corpus"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/NERTool
+:NERTool rdf:type owl:Class ;
+         rdfs:subClassOf :Tool ;
+         rdfs:label "Named Entity Recognition Tool"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/NewspaperCorpus
+:NewspaperCorpus rdf:type owl:Class ;
+                 rdfs:subClassOf :Corpus ;
+                 rdfs:label "Newspaper Corpus"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/NormalizationTool
+:NormalizationTool rdf:type owl:Class ;
+                   rdfs:subClassOf :Tool ;
+                   rdfs:label "Normalization Tool"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/OCRDocument
+:OCRDocument rdf:type owl:Class ;
+             rdfs:subClassOf :TextRecognitionDocument .
+
+
+###  http://cophilab.eu/ontologies/cophi/OralHistoryCorpus
+:OralHistoryCorpus rdf:type owl:Class ;
+                   rdfs:subClassOf :Corpus ;
+                   rdfs:label "Oral History Corpus"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/POSTaggingTool
+:POSTaggingTool rdf:type owl:Class ;
+                rdfs:subClassOf :Tool ;
+                rdfs:label "Part-of-Speech Tagging and Lemmatization Tool"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/Page
+:Page rdf:type owl:Class ;
+      rdfs:subClassOf :Digital_Human-Made_Feature ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty crm:P56_bears_feature ;
+                        owl:allValuesFrom :WrittenSpace
+                      ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/ParallelCorpus
+:ParallelCorpus rdf:type owl:Class ;
+                rdfs:subClassOf :Corpus ;
+                rdfs:label "Parallel Corpus"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/ParliamentaryCorpus
+:ParliamentaryCorpus rdf:type owl:Class ;
+                     rdfs:subClassOf :Corpus ;
+                     rdfs:label "Parliamentary Corpus"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/PhysicalCodex
+:PhysicalCodex rdf:type owl:Class ;
+               rdfs:subClassOf :PhysicalManuscript ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty crm:P46_is_composed_of ;
+                                 owl:allValuesFrom :PhysicalFolio
+                               ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/PhysicalFolio
+:PhysicalFolio rdf:type owl:Class ;
+               rdfs:subClassOf :PhysicalTextBearingObject ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty crm:P56_bears_feature ;
+                                 owl:allValuesFrom :PhysicalPageSide
+                               ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/PhysicalManuscript
+:PhysicalManuscript rdf:type owl:Class ;
+                    rdfs:subClassOf :PhysicalTextBearingObject .
+
+
+###  http://cophilab.eu/ontologies/cophi/PhysicalPageSide
+:PhysicalPageSide rdf:type owl:Class ;
+                  rdfs:subClassOf :Physical_Human-Made_Feature .
+
+
+###  http://cophilab.eu/ontologies/cophi/PhysicalTextBearingObject
+:PhysicalTextBearingObject rdf:type owl:Class ;
+                           rdfs:subClassOf crm:E22_Human-Made_Object .
+
+
+###  http://cophilab.eu/ontologies/cophi/Physical_Human-Made_Feature
+:Physical_Human-Made_Feature rdf:type owl:Class ;
+                             rdfs:subClassOf crm:E25_Human-Made_Feature .
+
+
+###  http://cophilab.eu/ontologies/cophi/Polygon
+:Polygon rdf:type owl:Class ;
+         rdfs:subClassOf :Digital_Human-Made_Feature ;
+         rdfs:comment "A polygon defined by a series of points." ;
+         rdfs:label "Polygon" .
+
+
+###  http://cophilab.eu/ontologies/cophi/ReferenceCorpus
+:ReferenceCorpus rdf:type owl:Class ;
+                 rdfs:subClassOf :Corpus ;
+                 rdfs:label "Reference Corpus"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/ScholarlyEdition
+:ScholarlyEdition rdf:type owl:Class ;
+                  rdfs:subClassOf :TextResource ,
+                                  ceo:ScholarlyEdition .
+
+
+###  http://cophilab.eu/ontologies/cophi/Segment
+:Segment rdf:type owl:Class ;
+         rdfs:subClassOf :Digital_Human-Made_Feature ,
+                         crmtex:TX7_Written_Text_Segment ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty crm:P128_carries ;
+                           owl:allValuesFrom :DocumentToken
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty crm:P56_bears_feature ;
+                           owl:allValuesFrom :Glyph
+                         ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/SegmentType
+:SegmentType rdf:type owl:Class ;
+             rdfs:subClassOf crm:E55_Type .
+
+
+###  http://cophilab.eu/ontologies/cophi/SentimentAnalysisTool
+:SentimentAnalysisTool rdf:type owl:Class ;
+                       rdfs:subClassOf :Tool ;
+                       rdfs:label "Sentiment Analysis Tool"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/Shape
+:Shape rdf:type owl:Class ;
+       rdfs:subClassOf :Digital_Human-Made_Feature ;
+       rdfs:comment "A shape associated with a text block, containing one or more polygons." ;
+       rdfs:label "Shape" .
+
+
+###  http://cophilab.eu/ontologies/cophi/SignLanguageResources
+:SignLanguageResources rdf:type owl:Class ;
+                       rdfs:subClassOf :Corpus ;
+                       rdfs:label "Sign Language Resources"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/SpokenCorpus
+:SpokenCorpus rdf:type owl:Class ;
+              rdfs:subClassOf :Corpus ;
+              rdfs:label "Spoken Corpus"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/TextDivision
+:TextDivision rdf:type owl:Class ;
+              rdfs:subClassOf :Division ,
+                              :TextObject .
+
+
+###  http://cophilab.eu/ontologies/cophi/TextDivisionType
+:TextDivisionType rdf:type owl:Class ;
+                  rdfs:subClassOf :DivisionType .
+
+
+###  http://cophilab.eu/ontologies/cophi/TextObject
+:TextObject rdf:type owl:Class ;
+            rdfs:subClassOf crm:E73_Information_Object .
+
+
+###  http://cophilab.eu/ontologies/cophi/TextPassage
+:TextPassage rdf:type owl:Class ;
+             rdfs:subClassOf :TextObject .
+
+
+###  http://cophilab.eu/ontologies/cophi/TextRecognitionDocument
+:TextRecognitionDocument rdf:type owl:Class ;
+                         rdfs:subClassOf :DocumentObject .
+
+
+###  http://cophilab.eu/ontologies/cophi/TextRecognitionDocumentCollection
+:TextRecognitionDocumentCollection rdf:type owl:Class ;
+                                   rdfs:subClassOf :DocumentResource ,
+                                                   [ rdf:type owl:Restriction ;
+                                                     owl:onProperty crm:P46_is_composed_of ;
+                                                     owl:allValuesFrom :TextRecognitionDocument
+                                                   ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/TextResource
+:TextResource rdf:type owl:Class ;
+              rdfs:subClassOf sshoc:SHE1_Dataset .
+
+
+###  http://cophilab.eu/ontologies/cophi/TextToken
+:TextToken rdf:type owl:Class ;
+           rdfs:subClassOf :TextObject ,
+                           :Token .
+
+
+###  http://cophilab.eu/ontologies/cophi/Token
+:Token rdf:type owl:Class ;
+       rdfs:subClassOf :CharacterSequence ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :has_token_part ;
+                         owl:allValuesFrom :Token
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :has_token_type ;
+                         owl:allValuesFrom :TokenType
+                       ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/TokenType
+:TokenType rdf:type owl:Class ;
+           rdfs:subClassOf crm:E55_Type .
+
+
+###  http://cophilab.eu/ontologies/cophi/Tool
+:Tool rdf:type owl:Class ;
+      rdfs:subClassOf sshoc:SHE10_Tool ;
+      rdfs:label "Tool"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/Wordlist
+:Wordlist rdf:type owl:Class ;
+          rdfs:subClassOf :LexicalResource ;
+          rdfs:label "Wordlist"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/WrittenSpace
+:WrittenSpace rdf:type owl:Class ;
+              rdfs:subClassOf :Digital_Human-Made_Feature ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty crm:P56_bears_feature ;
+                                owl:allValuesFrom :Zone
+                              ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/WrittenSpaceType
+:WrittenSpaceType rdf:type owl:Class ;
+                  rdfs:subClassOf crm:E55_Type .
+
+
+###  http://cophilab.eu/ontologies/cophi/Zone
+:Zone rdf:type owl:Class ;
+      rdfs:subClassOf :Digital_Human-Made_Feature ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty crm:P56_bears_feature ;
+                        owl:allValuesFrom :Line
+                      ] .
+
+
+###  http://cophilab.eu/ontologies/cophi/ZoneType
+:ZoneType rdf:type owl:Class ;
+    rdfs:subClassOf crm:E55_Type .
+    
+###  http://www.w3.org/1999/02/22-rdf-syntax-ns#List
+rdf:List rdf:type owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://cophilab.eu/ontologies/cophi/AncientGreek
+:AncientGreek rdf:type owl:NamedIndividual ,
+                       crm:E56_Language ;
+              rdfs:label "Ancient Greek" .
+
+
+###  http://cophilab.eu/ontologies/cophi/CustomZone
+:CustomZone rdf:type owl:NamedIndividual ,
+                     :ZoneType .
+
+
+###  http://cophilab.eu/ontologies/cophi/DamageZone
+:DamageZone rdf:type owl:NamedIndividual ,
+                     :ZoneType .
+
+
+###  http://cophilab.eu/ontologies/cophi/DefaultLine
+:DefaultLine rdf:type owl:NamedIndividual ,
+                      :LineType .
+
+
+###  http://cophilab.eu/ontologies/cophi/DigitizationArtefactZone
+:DigitizationArtefactZone rdf:type owl:NamedIndividual ,
+                                   :ZoneType .
+
+
+###  http://cophilab.eu/ontologies/cophi/Div1
+:Div1 rdf:type owl:NamedIndividual ,
+               :TextDivisionType .
+
+
+###  http://cophilab.eu/ontologies/cophi/Div2
+:Div2 rdf:type owl:NamedIndividual ,
+               :TextDivisionType .
+
+
+###  http://cophilab.eu/ontologies/cophi/Div3
+:Div3 rdf:type owl:NamedIndividual ,
+               :TextDivisionType .
+
+
+###  http://cophilab.eu/ontologies/cophi/Div4
+:Div4 rdf:type owl:NamedIndividual ,
+               :TextDivisionType .
+
+
+###  http://cophilab.eu/ontologies/cophi/Div5
+:Div5 rdf:type owl:NamedIndividual ,
+               :TextDivisionType .
+
+
+###  http://cophilab.eu/ontologies/cophi/Div6
+:Div6 rdf:type owl:NamedIndividual ,
+               :TextDivisionType .
+
+
+###  http://cophilab.eu/ontologies/cophi/DropCapitalLine
+:DropCapitalLine rdf:type owl:NamedIndividual ,
+                          :LineType .
+
+
+###  http://cophilab.eu/ontologies/cophi/DropCapitalZone
+:DropCapitalZone rdf:type owl:NamedIndividual ,
+                          :ZoneType .
+
+
+###  http://cophilab.eu/ontologies/cophi/GraphicZone
+:GraphicZone rdf:type owl:NamedIndividual ,
+                      :ZoneType .
+
+
+###  http://cophilab.eu/ontologies/cophi/HeadingLine
+:HeadingLine rdf:type owl:NamedIndividual ,
+                      :LineType .
+
+
+###  http://cophilab.eu/ontologies/cophi/InterlinearLine
+:InterlinearLine rdf:type owl:NamedIndividual ,
+                          :LineType .
+
+
+###  http://cophilab.eu/ontologies/cophi/IntertextualResearch
+:IntertextualResearch rdf:type owl:NamedIndividual ,
+                               crm:E55_Type ;
+                      rdfs:label "intertextual research"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/Latin
+:Latin rdf:type owl:NamedIndividual ,
+                crm:E56_Language ;
+       rdfs:label "Latin" .
+
+
+###  http://cophilab.eu/ontologies/cophi/LatinPoetry
+:LatinPoetry rdf:type owl:NamedIndividual ,
+                      crm:E55_Type ;
+             rdfs:label "Latin poetry"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/MIUR
+:MIUR rdf:type owl:NamedIndividual ,
+               :Legal_Body ;
+      crm:P1_is_identified_by :PRIN_2005 ,
+                              :PRIN_2007 ;
+      rdfs:label "MIUR" .
+
+
+###  http://cophilab.eu/ontologies/cophi/MQDQ
+:MQDQ rdf:type owl:NamedIndividual ,
+               :LiteraryCorpus ;
+      crm:P102_has_title :MQDQ_Title ;
+      crm:P104_is_subject_to :MQDQ_License ;
+      crm:P14_carried_out_by :MQDQ_Funding ;
+      crm:P1_is_identified_by :MQDQ_Identifier ;
+      crm:P2_has_type :IntertextualResearch ,
+                      :LatinPoetry ,
+                      :MetricalAnalysis ,
+                      :WordRetrieval ;
+      crm:P4_has_time-span :MQDQ_IssuedDate ;
+      crm:P67_refers_to :MQDQ_ContactPerson ;
+      crm:P72_has_language :AncientGreek ,
+                           :Latin ;
+      crm:P76_has_contact_point :MQDQ_AdvancedSearchLink ,
+                                :MQDQ_ProjectURL ;
+      crm:P94i_was_created_by :MQDQ_Authors ,
+                              :MQDQ_Publisher ;
+      crm:P3_has_note :MQDQ_Description ;
+      crm:P90_has_value :MQDQ_Size .
+
+
+###  http://cophilab.eu/ontologies/cophi/MQDQ_AdvancedSearchLink
+:MQDQ_AdvancedSearchLink rdf:type owl:NamedIndividual ,
+                                  :Contact_Point ;
+                         rdfs:label "https://www.mqdq.it/public/ricerca/avanzata"^^xsd:anyURI .
+
+
+###  http://cophilab.eu/ontologies/cophi/MQDQ_Authors
+:MQDQ_Authors rdf:type owl:NamedIndividual ,
+                       crm:E39_Actor ;
+              rdfs:label "AA. VV." .
+
+
+###  http://cophilab.eu/ontologies/cophi/MQDQ_ContactPerson
+:MQDQ_ContactPerson rdf:type owl:NamedIndividual ,
+                             crm:E39_Actor ;
+                    crm:P107_has_current_or_former_affiliation :CaFoscari_Venezia ;
+                    crm:P131_is_identified_by :Paolo_Mastandrea .
+
+
+###  http://cophilab.eu/ontologies/cophi/MQDQ_Description
+:MQDQ_Description rdf:type owl:NamedIndividual ,
+                           crm:E33_Linguistic_Object ;
+                  rdfs:label "Description of the Musisque Deoque (MQDQ) corpus."@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/MQDQ_Funding
+:MQDQ_Funding rdf:type owl:NamedIndividual ,
+                       crm:E11_Modification ;
+              crm:P14_carried_out_by :MIUR .
+
+
+###  http://cophilab.eu/ontologies/cophi/MQDQ_Identifier
+:MQDQ_Identifier rdf:type owl:NamedIndividual ,
+                          crm:E42_Identifier ;
+                 rdfs:label "https://hdl.handle.net/20.500.11752/OPEN-555"^^xsd:anyURI .
+
+
+###  http://cophilab.eu/ontologies/cophi/MQDQ_IssuedDate
+:MQDQ_IssuedDate rdf:type owl:NamedIndividual ,
+                          crm:E52_Time-Span ;
+                 crm:P82a_begin_of_the_begin "2005-01-01"^^xsd:date .
+
+
+###  http://cophilab.eu/ontologies/cophi/MQDQ_License
+:MQDQ_License rdf:type owl:NamedIndividual ,
+                       crm:E30_Right ;
+              crm:P67_refers_to "http://creativecommons.org/licenses/by-sa/4.0/"^^xsd:anyURI .
+
+
+###  http://cophilab.eu/ontologies/cophi/MQDQ_ProjectURL
+:MQDQ_ProjectURL rdf:type owl:NamedIndividual ,
+                          :Contact_Point ;
+                 rdfs:label "http://www.mqdq.it"^^xsd:anyURI .
+
+
+###  http://cophilab.eu/ontologies/cophi/MQDQ_Publisher
+:MQDQ_Publisher rdf:type owl:NamedIndividual ,
+                         crm:E39_Actor ;
+                rdfs:label "Istituto di Linguistica Computazionale 'A. Zampolli' - Consiglio Nazionale delle Ricerche (ILC-CNR)" .
+
+
+###  http://cophilab.eu/ontologies/cophi/MQDQ_Size
+:MQDQ_Size rdf:type owl:NamedIndividual ,
+                    crm:E54_Dimension ;
+           crm:P90_has_value 2300000 ;
+           crm:P91_has_unit "tokens" .
+
+
+###  http://cophilab.eu/ontologies/cophi/MQDQ_Title
+:MQDQ_Title rdf:type owl:NamedIndividual ,
+                     crm:E35_Title ;
+            rdfs:label "Musisque Deoque (MQDQ)"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/MainZone
+:MainZone rdf:type owl:NamedIndividual ,
+                   :ZoneType .
+
+
+###  http://cophilab.eu/ontologies/cophi/MarginTextZone
+:MarginTextZone rdf:type owl:NamedIndividual ,
+                         :ZoneType .
+
+
+###  http://cophilab.eu/ontologies/cophi/MetricalAnalysis
+:MetricalAnalysis rdf:type owl:NamedIndividual ,
+                           crm:E55_Type ;
+                  rdfs:label "metrical analysis"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/MusicZone
+:MusicZone rdf:type owl:NamedIndividual ,
+                    :ZoneType .
+
+
+###  http://cophilab.eu/ontologies/cophi/NumberingZone
+:NumberingZone rdf:type owl:NamedIndividual ,
+                        :ZoneType .
+
+
+###  http://cophilab.eu/ontologies/cophi/PRIN_2005
+:PRIN_2005 rdf:type owl:NamedIndividual ,
+                    crm:E42_Identifier ;
+           rdfs:label "PRIN 2005" .
+
+
+###  http://cophilab.eu/ontologies/cophi/PRIN_2007
+:PRIN_2007 rdf:type owl:NamedIndividual ,
+                    crm:E42_Identifier ;
+           rdfs:label "PRIN 2007" .
+
+
+###  http://cophilab.eu/ontologies/cophi/Paolo_Mastandrea
+:Paolo_Mastandrea rdf:type owl:NamedIndividual ,
+                           crm:E21_Person ;
+                  crm:P131_is_identified_by [ rdf:type :Actor_Appellation ;
+                                              rdfs:label "Paolo Mastandrea"
+                                            ] ;
+                  crm:P76_has_contact_point "mast@unive.it" .
+
+
+###  http://cophilab.eu/ontologies/cophi/Paragraph
+:Paragraph rdf:type owl:NamedIndividual ,
+                    :TextDivisionType .
+
+
+###  http://cophilab.eu/ontologies/cophi/PoemLine
+:PoemLine rdf:type owl:NamedIndividual ,
+                   :TextDivisionType .
+
+
+###  http://cophilab.eu/ontologies/cophi/PoemLineGroup
+:PoemLineGroup rdf:type owl:NamedIndividual ,
+                        :TextDivisionType .
+
+
+###  http://cophilab.eu/ontologies/cophi/QuireMarksZone
+:QuireMarksZone rdf:type owl:NamedIndividual ,
+                         :ZoneType .
+
+
+###  http://cophilab.eu/ontologies/cophi/RunningTitleZone
+:RunningTitleZone rdf:type owl:NamedIndividual ,
+                           :ZoneType .
+
+
+###  http://cophilab.eu/ontologies/cophi/SealZone
+:SealZone rdf:type owl:NamedIndividual ,
+                   :ZoneType .
+
+
+###  http://cophilab.eu/ontologies/cophi/Sentence
+:Sentence rdf:type owl:NamedIndividual ,
+                   :LinguisticDivisionType .
+
+
+###  http://cophilab.eu/ontologies/cophi/SpaceSegment
+:SpaceSegment rdf:type owl:NamedIndividual ,
+                       :SegmentType .
+
+
+###  http://cophilab.eu/ontologies/cophi/StampZone
+:StampZone rdf:type owl:NamedIndividual ,
+                    :ZoneType .
+
+
+###  http://cophilab.eu/ontologies/cophi/TableZone
+:TableZone rdf:type owl:NamedIndividual ,
+                    :ZoneType .
+
+
+###  http://cophilab.eu/ontologies/cophi/TextSegment
+:TextSegment rdf:type owl:NamedIndividual ,
+                      :SegmentType .
+
+
+###  http://cophilab.eu/ontologies/cophi/TitlePageZone
+:TitlePageZone rdf:type owl:NamedIndividual ,
+                        :ZoneType .
+
+
+###  http://cophilab.eu/ontologies/cophi/WordRetrieval
+:WordRetrieval rdf:type owl:NamedIndividual ,
+                        crm:E55_Type ;
+               rdfs:label "word-retrieval"@en .
+
+
+###  http://cophilab.eu/ontologies/cophi/WrittenSpace
+:WrittenSpace rdf:type owl:NamedIndividual ,
+                       :WrittenSpaceType .
+
+
+#################################################################
+#    Annotations
+#################################################################
+
+geo:as_linestring rdfs:comment "Defines the baseline (=linestring) geometry in WKT format." ;
+                  rdfs:label "as linestring" .
+
+
+geo:as_polygon rdfs:comment "Defines the polygon geometry in WKT format." ;
+               rdfs:label "as polygon" .
+
+
+###  Generated by the OWL API (version 4.5.25.2023-02-15T19:15:49Z) https://github.com/owlcs/owlapi
